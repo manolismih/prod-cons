@@ -30,4 +30,4 @@ The benchmarks were performed on an Intel(R) Core(TM) i7 CPU 870 @ 2.93GHz, 4CPU
 
 ![Benchmarks table](benchmarks.jpg)
 
-A full report is available in greek [here](report.odt).
+A full report is available in greek [here](report.pdf).
