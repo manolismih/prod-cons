@@ -1,5 +1,6 @@
 # A solution to the producer consumer problem using	pthreads.
-_Exercise for the Real Time Embedded Systems course, school of Electrical and Computer Engineering, Aristotle University of Thessaloniki._
+_Programming assignment for the Real Time Embedded Systems course, school of Electrical and Computer Engineering, AUTH._  
+_March of 2020_
 
 The demo program [pc.c](pc.c) is modified so that the queue accepts WorkFunction structs:
 ```C
