@@ -5,11 +5,15 @@
 
 extern FILE* queueLog;
 
-Queue *queueInit (void)
+Queue* queueInit (void)
 {
 	Queue* q = malloc (sizeof (Queue));
-	if (q == NULL) return (NULL);
+	if (q ==  NULL) {
+		fprintf (stderr, "Queue Init failed.\n");
+		exit (1);
+	}
 
+	q->nProducers = 0;
 	q->nContents = 0;
 	q->head = 0;
 	q->tail = 0;

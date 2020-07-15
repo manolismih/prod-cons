@@ -8,29 +8,6 @@
 FILE* waitLog;
 FILE* queueLog;
 
-void* producer (void* q)
-{
-	Queue* fifo = q;
-	for (int i=0; i<LOOP; i++) 
-	{
-		WorkFunction *new = malloc(sizeof(WorkFunction));
-		int num = rand()%3;
-		new->work = workFunctions[num].pointer;
-		new->arg  = workFunctions[num].argsGen();
-		
-		pthread_mutex_lock (fifo->mut);
-		while (fifo->nContents == QUEUESIZE) 
-		{
-			//~ printf ("producer: Queue FULL.\n");
-			pthread_cond_wait (fifo->notFull, fifo->mut);
-		}
-		queueAdd (fifo, new);
-		pthread_mutex_unlock (fifo->mut);
-		pthread_cond_signal (fifo->notEmpty);
-	}
-	return NULL;
-}
-
 void* consumer (void *q)
 {
 	Queue* fifo = q;
@@ -77,28 +54,29 @@ void* consumer (void *q)
 
 int main(int argc, char* argv[])
 {
-	if (argc != 3) 
+	if (argc < 3) 
 	{
-		printf("Usage: ./prod-cons <nProducers> <nConsumers>\nAbort\n");
+		printf("Usage: ./prod-cons <nConsumers> <msTimer1Period> <msTimer2Period> ...\nAbort\n");
 		return -1;
 	}
 	
 	srand(time(NULL));
-	Queue *fifo;
-	fifo = queueInit ();
-	if (fifo ==  NULL) {
-		fprintf (stderr, "main: Queue Init failed.\n");
-		exit (1);
-	}
+	Queue* fifo = queueInit();
 	waitLog 	= fopen("waitLog","w");
 	queueLog 	= fopen("queueLog","w");
 	
-	fifo->noProducers = 0;
-	int nProducers = atoi(argv[1]);
-	int nConsumers = atoi(argv[2]);
-	pthread_t pro[nProducers], con[nConsumers];
-	for (int i=0; i<nProducers; i++) pthread_create (pro+i, NULL, producer, fifo);
+	int nTimers = argc-2;
+	int nConsumers = atoi(argv[1]);
+	fifo->nProducers = nTimers;
+	pthread_t con[nConsumers];
+	Timer* tim[nTimers];
+	for (int i=0; i<nTimers; i++)
+	{
+		tim[i] = timerInit(atoi(argv[2+i]),fifo);
+		timerStart(tim[i]);
+	}
 	for (int i=0; i<nConsumers; i++) pthread_create (con+i, NULL, consumer, fifo);
+	
 	for (int i=0; i<nProducers; i++) pthread_join (pro[i], NULL);
 	fifo->noProducers = 1;
 	// unblock all consumers, so that they detect that all producers are terminated

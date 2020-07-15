@@ -23,6 +23,11 @@ void* print_nothing(void* args); //args will be ignored
 
 //**********************************************************************
 
+void* stopFcn();
+void* errorFcn();
+
+//**********************************************************************
+
 typedef struct {
 	void* (*pointer)(void*);
 	void* (*argsGen)();

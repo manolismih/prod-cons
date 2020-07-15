@@ -20,7 +20,7 @@ typedef struct {
 typedef struct {
 	WorkFunction* buf[QUEUESIZE];
 	long head, tail;
-	int nContents, noProducers;
+	int nContents, nProducers;
 	pthread_mutex_t *mut;
 	pthread_cond_t *notFull, *notEmpty;
 } Queue;

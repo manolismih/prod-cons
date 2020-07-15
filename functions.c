@@ -59,3 +59,15 @@ void* print_nothing(void* args) //args will be ignored
 	printf("");
 	return args;
 }
+
+//**********************************************************************
+
+void* stopFcn()
+{
+	printf("Timer finished\n");
+}
+
+void* errorFcn()
+{
+	printf("Queue is full!!!\n");
+}
