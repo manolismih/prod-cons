@@ -38,26 +38,22 @@ void queueDelete (Queue* q) //make sure Queue is empty first
 	free (q);
 }
 
-void queueAdd (Queue* q, WorkFunction* in)
+void queueAdd (Queue* q, Timer* in)
 {
 	//~ printf("Trying to add to queue which has %d elements\n",q->nContents);
-	//issue submit timestamp
-	gettimeofday(&in->submitted,NULL);
-	
 	q->buf[q->tail] = in;
 	q->tail++;
 	if (q->tail == QUEUESIZE) q->tail = 0;
 	q->nContents++;
-	fprintf(queueLog,"%d\n",q->nContents);
+	//~ printf("%d\n",q->nContents);
 }
 
-WorkFunction* queueDel (Queue* q)
+Timer* queueDel (Queue* q)
 {
 	//~ printf("Trying to remove from queue which has %d elements\n",q->nContents);
-	WorkFunction *out = q->buf[q->head];
+	Timer* out = q->buf[q->head];
 	q->head++;
 	if (q->head == QUEUESIZE) q->head = 0;
 	q->nContents--;
-	fprintf(queueLog,"%d\n",q->nContents);
 	return out;
 }

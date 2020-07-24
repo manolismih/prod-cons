@@ -1,19 +1,18 @@
-function void = analyze()
-	waitingTime = importdata("waitLog");
-	queueSize 	= importdata("queueLog");
-	waitMean = mean(waitingTime)
-	waitStd = std(waitingTime)
-	queueMean = mean(queueSize)
-	hist(waitingTime,20);
-	title("Waiting time");
-	xlabel("Time in microseconds");
-	ylabel("Number of workFunctions");
-	print("waiting","-dsvg");
-	
-	grid on;
-	plot(queueSize);
-	title("Length of queue");
-	xlabel("Time");
-	ylabel("workFunctions in queue");
-	print("queue","-dsvg");
+function void = analyze(ms)
+	A = importdata('producerTimeLog.txt').data;
+	B = importdata('consumerTimeLog.txt').data;
+	C = importdata(['drift' num2str(ms) 'msLog.txt']).data(2:end);
+	metrics(A);
+	metrics(B);
+	metrics(C);
 end
+
+function nothing = metrics(data)
+	min(data)
+	max(data)
+	mean(data)
+	median(data)
+	std(data)
+end
+
+
